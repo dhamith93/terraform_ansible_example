@@ -1,0 +1,14 @@
+---
+- name: Open port 3306 (MySQL)
+  firewalld:
+    zone: public
+    port: 3306/tcp
+    permanent: true
+    state: enabled
+  become: yes
+
+- name: Reload service firewalld
+  systemd:
+    name: firewalld
+    state: reloaded
+  become: yes

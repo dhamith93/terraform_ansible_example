@@ -1,0 +1,34 @@
+---
+- name: Adding ERLANG repos
+  shell: curl -s https://packagecloud.io/install/repositories/rabbitmq/erlang/script.rpm.sh | bash
+  
+- name: Adding RabbitMQ repos
+  shell: curl -s https://packagecloud.io/install/repositories/rabbitmq/rabbitmq-server/script.rpm.sh | bash
+  
+- name: Installing ERLANG and RabbitMQ
+  yum:
+    name:
+      - erlang
+      - rabbitmq-server-3.8.4
+    state: present
+    
+- name: Starting RabbitMQ
+  service: 
+    name: rabbitmq-server
+    state: started
+    enabled: yes
+    
+- name: Enabling RabbitMQ management plugin
+  shell: rabbitmq-plugins enable rabbitmq_management
+    
+- name: Copying RabbitMQ conf file
+  copy:
+    src: rabbitmq.conf
+    dest: /etc/rabbitmq/
+    mode: '0644'
+    
+- name: Restarting RabbitMQ
+  service: 
+    name: rabbitmq-server
+    state: restarted
+    enabled: yes

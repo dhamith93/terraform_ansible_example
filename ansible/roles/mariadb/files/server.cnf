@@ -1,0 +1,62 @@
+#
+# These groups are read by MariaDB server.
+# Use it for options that only the server (but not clients) should see
+#
+# See the examples of server my.cnf files in /usr/share/mysql/
+#
+
+# this is read by the standalone daemon and embedded servers
+[server]
+
+# this is only for the mysqld standalone daemon
+[mysqld]
+innodb_buffer_pool_size=2G
+innodb_log_file_size=1G
+innodb_lock_wait_timeout=30
+innodb_log_buffer_size=8M
+sql_mode=""
+max_allowed_packet=64M
+connect_timeout=60
+delayed_insert_timeout=300
+interactive_timeout=600
+net_read_timeout=30
+net_write_timeout=60
+slave_net_timeout=600
+wait_timeout=600
+event_scheduler=ON
+innodb_flush_log_at_trx_commit=1
+skip-name-resolve
+skip-host-cache
+
+#
+# * Galera-related settings
+#
+[galera]
+# Mandatory settings
+#wsrep_on=ON
+#wsrep_provider=
+#wsrep_cluster_address=
+#binlog_format=row
+#default_storage_engine=InnoDB
+#innodb_autoinc_lock_mode=2
+#
+# Allow server to accept connections on all interfaces.
+#
+#bind-address=0.0.0.0
+#
+# Optional setting
+#wsrep_slave_threads=1
+#innodb_flush_log_at_trx_commit=0
+
+# this is only for embedded server
+[embedded]
+
+# This group is only read by MariaDB servers, not by MySQL.
+# If you use the same .cnf file for MySQL and MariaDB,
+# you can put MariaDB-only options here
+[mariadb]
+
+# This group is only read by MariaDB-10.2 servers.
+# If you use the same .cnf file for MariaDB of different versions,
+# use this group for options that older servers don't understand
+[mariadb-10.2]

@@ -1,0 +1,39 @@
+---
+- name: Open port 80
+  firewalld:
+    zone: public
+    port: 80/tcp
+    permanent: true
+    state: enabled
+  become: yes
+
+- name: Open port 443
+  firewalld:
+    zone: public
+    port: 443/tcp
+    permanent: true
+    state: enabled
+  become: yes
+
+- name: Open port 5671 (RabbitMQ)
+  firewalld:
+    zone: public
+    port: 5671/tcp
+    permanent: true
+    state: enabled
+  become: yes
+
+- name: Open port 15672 (RabbitMQ)
+  firewalld:
+    zone: public
+    port: 15672/tcp
+    permanent: true
+    state: enabled
+  become: yes
+  
+
+- name: Reload service firewalld
+  systemd:
+    name: firewalld
+    state: reloaded
+  become: yes

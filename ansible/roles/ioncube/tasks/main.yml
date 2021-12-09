@@ -1,0 +1,32 @@
+---
+- name: Determining PHP extension directory
+  shell: "php -i | grep -o -m 1 'extension_dir .* =' | sed -r 's/extension_dir => //g' | sed -r 's/ =//g'"
+  register: php_extension_dir
+  failed_when: "php_extension_dir.stdout == 'xx'"
+  ignore_errors: true
+
+- name: Setting facts
+  set_fact: >
+    php_extension_dir="{{ php_extension_dir.stdout }}"
+
+- name: Downloading ioncube loader
+  get_url: >
+    url="{{ ioncube_download_url }}"
+    dest=/tmp/{{ ioncube_tarfile }}
+  when: ansible_machine == 'x86_64'
+
+- name: Extracting ioncube loader
+  unarchive:
+    src: "/tmp/{{ ioncube_tarfile }}"
+    dest: "/tmp"
+    copy: no
+
+- name: Installing ioncube loader
+  command: cp "/tmp/ioncube/ioncube_loader_lin_7.4.so" "{{ php_extension_dir }}/ioncube_loader_lin_7.4.so"
+
+- name: Configuring php.ini - ioncube loader 
+  lineinfile:
+    dest: "/etc/php.ini"
+    regexp: "^zend_extension"
+    line: "zend_extension={{ php_extension_dir }}/ioncube_loader_lin_7.4.so"
+    state: present

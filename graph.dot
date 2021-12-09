@@ -1,0 +1,31 @@
+digraph G {
+  compound=true;
+  subgraph cluster_0 {
+    label = "VPC";
+    node [shape=box];
+    IGW->RT
+    subgraph cluster_1 {
+        label = "Subnet";
+        subgraph cluster_2 {
+            label = "SG-1";
+            node [style=filled,shape=box];
+            DB;
+        }
+        subgraph cluster_3 {
+            label = "SG-2";
+            node [style=filled,shape=box];
+            UAT;
+            PROD;
+            DEMO;
+        }
+    }
+    
+  }
+
+  UAT->DB;
+  PROD->DB;
+  DEMO->DEMO;
+  RT->DEMO [lhead=cluster_1];
+  node [shape=box];
+  INTERNET->IGW 
+}

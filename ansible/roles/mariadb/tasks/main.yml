@@ -1,0 +1,66 @@
+---
+- name: Enable MariaDB repository
+  copy:
+    src: Mariadb.repo.centos
+    dest: /etc/yum.repos.d/Mariadb.repo
+    mode: '0644'
+
+- name: Enable EPEL Repository on CentOS 7
+  yum:
+    name: epel-release
+    state: latest
+  become: true
+  when: ansible_facts['os_family'] == 'RedHat' and ansible_facts['distribution_major_version'] == '7'
+
+- name: Installing MariaDB
+  yum:
+    name:
+      - MariaDB-server 
+      - MariaDB-client
+    state: present
+
+- name: Starting mariadb
+  service: 
+    name: mariadb
+    state: started
+    enabled: yes
+
+- name: Copying mariadb server.cnf file
+  copy:
+    src: server.cnf
+    dest: /etc/my.cnf.d/
+    mode: '0644'
+
+- name: Installing dependencies
+  yum:
+    name: MySQL-python
+    state: present
+
+- name: Setting mariadb root password
+  mysql_user:
+    check_implicit_admin: true
+    login_user: root
+    login_password: "{{ mysql_root_pswd }}"
+    user: root
+    password: "{{ mysql_root_pswd }}"
+    host: localhost
+
+- name: Removing remote mariadb root
+  mysql_user:
+    check_implicit_admin: true
+    login_user: root
+    login_password: "{{ mysql_root_pswd }}"
+    user: root
+    password: "{{ mysql_root_pswd }}"
+    host: "{{ ansible_fqdn }}"
+    state: absent
+
+- name: Removing remote mariadb root %
+  mysql_user:
+    check_implicit_admin: true
+    login_user: root
+    login_password: "{{ mysql_root_pswd }}"
+    user: root
+    password: "{{ mysql_root_pswd }}"
+    host: "%"
+    state: absent

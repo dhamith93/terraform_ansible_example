@@ -1,0 +1,66 @@
+---
+- name: Installing PHP
+  yum:
+    name:
+      - mod_php74
+      - php74-cli 
+      - php74-ldap 
+      - php74-bcmath 
+      - php74-devel 
+      - php74-mysqlnd 
+      - php74-pdo 
+      - php74-mbstring
+      - php74-soap 
+      - php74-gd 
+      - php74-xml 
+      - php74-imap 
+      - php74-json 
+      - php74-gmp 
+      - php74-pecl-apcu 
+      - php74-pecl-igbinary 
+      - php74-pecl-zip
+      - pear1.noarch
+    state: present
+
+- name: Installing mcrypt module
+  pear:
+    name: pecl/mcrypt
+    state: latest
+  become: true
+
+- name: Installing ssh2 module
+  pear:
+    name: pecl/ssh2-1.2
+    state: latest
+  become: true
+
+- name: Installing memcached module
+  pear:
+    name: pecl/memcached-3.1.5
+    state: latest
+  become: true
+
+- name: Configure php.ini
+  lineinfile:
+    dest: "/etc/php.ini"
+    regexp: "{{ item.regexp }}"
+    line: "{{ item.line }}"    
+    state: present
+  with_items:
+    - { regexp: "^extension=ssh2.so", line: "extension=ssh2.so" }
+    - { regexp: "^extension=mcrypt.so", line: "extension=mcrypt.so" }
+    - { regexp: "^extension=memcached.so", line: "extension=memcached.so" }
+    - { regexp: "^short_open_tag", line: "short_open_tag = Off" }
+    - { regexp: "^error_reporting", line: "error_reporting = E_ALL & ~E_DEPRECATED &~E_STRICT & ~E_NOTICE" }
+    - { regexp: "^memory_limit", line: "memory_limit = 2048M" }
+    - { regexp: "^max_execution_time", line: "max_execution_time = 300" }
+    - { regexp: "^max_input_vars", line: "max_input_vars = 1500" }
+    - { regexp: "^expose_php", line: "expose_php = Off" }
+    - { regexp: "^enable_dl", line: "enable_dl = Off" }
+    - { regexp: "^allow_url_fopen", line: "allow_url_fopen = Off" }
+    - { regexp: "^allow_url_include", line: "allow_url_include = Off" }
+    - { regexp: "^display_errors", line: "display_errors = Off" }
+    - { regexp: "^post_max_size", line: "post_max_size = 50M" }
+    - { regexp: "^upload_tmp_dir", line: "upload_tmp_dir = /tmp" }
+    - { regexp: "^upload_max_filesize", line: "upload_max_filesize = 50M" }
+    - { regexp: "^precision", line: "precision = 14" }

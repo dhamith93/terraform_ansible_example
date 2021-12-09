@@ -1,0 +1,12 @@
+---
+- name: Starting apache
+  service: 
+    name: httpd
+    state: started
+    enabled: yes
+
+- name: Starting RabbitMQ
+  service: 
+    name: rabbitmq-server
+    state: started
+    enabled: yes

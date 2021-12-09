@@ -1,0 +1,36 @@
+---
+- name: Enable EPEL Repository on CentOS 7
+  yum:
+    name: epel-release
+    state: latest
+  become: true
+  when: ansible_facts['os_family'] == 'RedHat' and ansible_facts['distribution_major_version'] == '7'
+
+- name: Enable IUS Repository on CentOS 7
+  yum:
+    name: https://repo.ius.io/ius-release-el7.rpm
+    state: present
+  become: true
+  when: ansible_facts['os_family'] == 'RedHat' and ansible_facts['distribution_major_version'] == '7'
+
+- name: Installing Apache and dependencies
+  yum:
+    name: 
+      - "@Development Tools"
+      - make 
+      - libmcrypt 
+      - libmcrypt-devel 
+      - libssh2 
+      - libssh2-devel 
+      - libmemcached-devel
+      - zip
+      - unzip
+      - wget
+      - curl
+      - vim
+      - python-PyMySQL
+      - poppler-utils
+      - urw-fonts
+      - libreoffice-headless
+      - httpd
+    state: present
