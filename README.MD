@@ -15,7 +15,7 @@ ANSIBLE_HOST_KEY_CHECKING=False ansible-playbook base.yml -i ../terraform/invent
 ```
 
 ## Design
-![](diagram.png)
+<img width="300" alt="" src="https://raw.githubusercontent.com/dhamith93/terraform_ansible_example/master/diagram.png">
 
 - DB server
   - 10.0.1.100
