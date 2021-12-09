@@ -22,9 +22,9 @@ digraph G {
     
   }
 
-  UAT->DB;
-  PROD->DB;
-  DEMO->DEMO;
+  UAT->DB [label=" :3306"];
+  PROD->DB [label=" :3306"];
+  DEMO->DEMO [label=" :3306"];
   RT->DEMO [lhead=cluster_1];
   node [shape=box];
   INTERNET->IGW 
